@@ -41,7 +41,10 @@ private:
 	std::ifstream 								     m_file;
 	unsigned int 						           m_chunkCount;
 	std::mutex							           m_mutex;
-
 };
 
 #endif /* SORTINGMANAGER_H_ */
+
+//============================================================================
+// End of file
+//============================================================================
