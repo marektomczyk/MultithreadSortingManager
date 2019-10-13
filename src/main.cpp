@@ -9,11 +9,21 @@
 #include <iostream>
 #include "SortingManager.h"
 #include "algorithm/QuickSortAlgorithm.h"
+#include "timer/Timer.h"
 
 int main( int argc, char* argv[] )
 {
+	Timer::StartTimer();
+
 	SortingManager sortingManager(new QuickSortAlgorithm, "in.txt", 1u);
 	sortingManager.Sort();
 
+
+	Timer::StopTimer();
+	Timer::ShowRecords();
 	return 0;
 }
+
+//============================================================================
+// End of file
+//============================================================================

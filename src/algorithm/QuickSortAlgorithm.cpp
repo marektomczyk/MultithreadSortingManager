@@ -7,14 +7,14 @@
 //============================================================================
 
 #include "QuickSortAlgorithm.h"
-#include <thread> // delete
-#include <iostream> // delete
+#include "../timer/Timer.h"
 
 void QuickSortAlgorithm::Sort(const char * dataToSort, unsigned int chunkCount)
 {
-	std::cout << "ThreadID: " << std::this_thread::get_id() << " Sort algorithm: " << GetName() << std::endl; //delete
+	Timer::TimeRecord record;
 	//qSort(dataToSort, 0, std::strlen(dataToSort));
-	std::this_thread::sleep_for(std::chrono::seconds(5));
+	record.Stop();
+	Timer::AddRecord(record);
 
 	delete [] dataToSort;
 	dataToSort = nullptr;
