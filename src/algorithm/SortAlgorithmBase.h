@@ -6,22 +6,22 @@
 // Description : Sorting algorithm base class
 //============================================================================
 
-#ifndef _ALGORITHM_ALGORITHMBASE_H_
-#define _ALGORITHM_ALGORITHMBASE_H_
+#ifndef _ALGORITHM_SORTALGORITHMBASE_H_
+#define _ALGORITHM_SORTALGORITHMBASE_H_
 
 #include <string>
 #include <vector>
 #include <memory>
 
-class AlgorithmBase
+class SortAlgorithmBase
 {
 public:
 	/// @brief Class constructor
-	AlgorithmBase(const std::string algorithmName)
+	SortAlgorithmBase(const std::string algorithmName)
 		: m_algorithmName(algorithmName) { }
 
 	/// @brief Class destructor
-	virtual ~AlgorithmBase() = default;
+	virtual ~SortAlgorithmBase() = default;
 
 	/// @brief Get name function
 	inline const std::string GetName() const { return m_algorithmName; }
