@@ -9,7 +9,6 @@
 #ifndef _SORTINGMANAGER_H_
 #define _SORTINGMANAGER_H_
 
-#include "algorithm/AlgorithmBase.h"
 #include "ThreadPool.hpp"
 #include <string>
 #include <memory>
@@ -20,6 +19,7 @@
 #include <sstream>
 #include <iostream>
 #include <string.h>
+#include "algorithm/SortAlgorithmBase.h"
 
 #define CHUNK_SIZE 10
 
@@ -27,7 +27,7 @@ class SortingManager
 {
 public:
 	/// @brief Class constructor
-	SortingManager(AlgorithmBase *pSortAlgorithm,
+	SortingManager(SortAlgorithmBase *pSortAlgorithm,
 								 std::string fileName,
 								 unsigned int threadCount = std::thread::hardware_concurrency());
 	/// @brief Class destructor
@@ -36,7 +36,7 @@ public:
 	void Sort();
 
 private:
-	std::shared_ptr<AlgorithmBase>     m_sortAlgorithm;
+	std::shared_ptr<SortAlgorithmBase>     m_sortAlgorithm;
 	const unsigned int                 m_threadCount;
 	std::ifstream 								     m_file;
 	unsigned int 						           m_chunkCount;

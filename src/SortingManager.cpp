@@ -8,7 +8,7 @@
 
 #include "SortingManager.h"
 
-SortingManager::SortingManager(AlgorithmBase *pSortAlgorithm, std::string fileName, const unsigned int threadCount)
+SortingManager::SortingManager(SortAlgorithmBase *pSortAlgorithm, std::string fileName, const unsigned int threadCount)
 	: m_threadCount(threadCount)
 {
 	if( pSortAlgorithm != nullptr )
@@ -62,7 +62,7 @@ void SortingManager::Sort()
 				auto chunk = "";
 				if( chunk != nullptr )
 				{
-					threadPool.AddTask(&AlgorithmBase::Sort, m_sortAlgorithm.get(), chunk, sortedChunkCounter);
+					threadPool.AddTask(&SortAlgorithmBase::Sort, m_sortAlgorithm.get(), chunk, sortedChunkCounter);
 				}
 			}
 		}

@@ -8,18 +8,18 @@
 #ifndef _ALGORITHM_QUICKSORTALGORITHM_H_
 #define _ALGORITHM_QUICKSORTALGORITHM_H_
 
-#include "AlgorithmBase.h"
 #include <algorithm>
+#include "SortAlgorithmBase.h"
 
-class QuickSortAlgorithm : public AlgorithmBase
+class QuickSortAlgorithm : public SortAlgorithmBase
 {
 public:
 	/// @brief Class constructor
 	QuickSortAlgorithm()
-		: AlgorithmBase("QuickSort") { }
+		: SortAlgorithmBase("QuickSort") { }
 
 	/// @brief Sort method
-	virtual void Sort(const char * dataToSort, unsigned int chunkCount) override final;
+	void Sort(const char * dataToSort, unsigned int chunkCount) final;
 
 	/// @brief Class destructor
 	~QuickSortAlgorithm() = default;
