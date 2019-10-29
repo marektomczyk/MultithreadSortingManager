@@ -27,7 +27,7 @@ class SortingManager
 {
 public:
 	/// @brief Class constructor
-	SortingManager(SortAlgorithmBase *pSortAlgorithm,
+	SortingManager(const std::shared_ptr<SortAlgorithmBase> &pSortAlgorithm,
 								 std::string fileName,
 								 unsigned int threadCount = std::thread::hardware_concurrency());
 	/// @brief Class destructor
@@ -36,11 +36,19 @@ public:
 	void Sort();
 
 private:
+	/// @brief Returns read chunk from input file
+	const char *  readChunkFromFile();
+
+	/// @brief Pointer to sort algorithm
 	std::shared_ptr<SortAlgorithmBase>     m_sortAlgorithm;
-	const unsigned int                 m_threadCount;
-	std::ifstream 								     m_file;
-	unsigned int 						           m_chunkCount;
-	std::mutex							           m_mutex;
+	/// @brief Count of worker thread
+	const unsigned int                 		 m_threadCount;
+	/// @brief Input file stream
+	std::ifstream 								     		 m_file;
+	/// @brief Count of chunk to sort
+	unsigned int 						           		 m_chunkCount;
+	/// @brief Access control mutex
+	std::mutex							           		 m_mutex;
 };
 
 #endif /* SORTINGMANAGER_H_ */
