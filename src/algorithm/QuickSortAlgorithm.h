@@ -19,7 +19,7 @@ public:
 		: SortAlgorithmBase("QuickSort") { }
 
 	/// @brief Sort method
-	void Sort(const char * dataToSort, unsigned int chunkCount) final;
+	void Sort(const char * chunk, unsigned int chunkCount) final;
 
 	/// @brief Class destructor
 	~QuickSortAlgorithm() = default;

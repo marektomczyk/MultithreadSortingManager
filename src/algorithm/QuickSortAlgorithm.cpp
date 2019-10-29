@@ -8,18 +8,38 @@
 
 #include "QuickSortAlgorithm.h"
 #include "../timer/Timer.h"
+#include "../tools/ToolSet.h"
+#include <iostream>
 
-void QuickSortAlgorithm::Sort(const char * dataToSort, unsigned int chunkCount)
+/*****************************************************************************
+ *	@brief Sort given chunk of data and write it to new file
+ *
+ *	@param chunk - data to sort
+ *	@param chunkCount - number of sorting chunk
+ *
+ *	@return None
+ ****************************************************************************/
+void QuickSortAlgorithm::Sort(const char * chunk, unsigned int chunkCount)
 {
+	auto dataToSort = ToolSet::ConvertBytesToVector(chunk, ' ');
+	delete [] chunk;
+	chunk = nullptr;
+
 	Timer::TimeRecord record;
-	//qSort(dataToSort, 0, std::strlen(dataToSort));
+	qSort(dataToSort, 0, dataToSort.size());
 	record.Stop();
 	Timer::AddRecord(record);
-
-	delete [] dataToSort;
-	dataToSort = nullptr;
 }
 
+/*****************************************************************************
+ *	@brief Quicksort algorithm implementation
+ *
+ *	@param dataToSort - vector of data to sort
+ *	@param low -
+ *	@param high -
+ *
+ *	@return None
+ ****************************************************************************/
 void QuickSortAlgorithm::qSort(std::vector<int> &dataToSort, int low, int high)
 {
 	if( low < high )
@@ -33,20 +53,29 @@ void QuickSortAlgorithm::qSort(std::vector<int> &dataToSort, int low, int high)
 	qSort(dataToSort, pivot + 1, high);
 }
 
+/*****************************************************************************
+ *	@brief Partition data to sort
+ *
+ *	@param dataToSort - vector of data to sort
+ *	@param low -
+ *	@param high -
+ *
+ *	@return Pivot
+ ****************************************************************************/
 const int QuickSortAlgorithm::partition(std::vector<int> &dataToSort, int low, int high)
 {
-  int left=low;
-  int right=high;
-  int v= dataToSort[left];
+  int left  = low;
+  int right = high;
+  int v = dataToSort[left];
 
-  while( left < right )
+  while ( left < right )
   {
-      while( dataToSort[left] <= v)
+      while ( dataToSort[left] <= v )
       	left++;
-      while( dataToSort[right] > v)
+      while ( dataToSort[right] > v )
       	right--;
 
-      if (left < right)
+      if ( left < right )
       {
       	std::swap(dataToSort[left], dataToSort[right]);
       }

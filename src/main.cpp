@@ -15,7 +15,7 @@ int main( int argc, char* argv[] )
 {
 	Timer::StartTimer();
 
-	SortingManager sortingManager(new QuickSortAlgorithm, "in.txt", 1u);
+	SortingManager sortingManager(std::make_shared<QuickSortAlgorithm>(), "in.txt", 1u);
 	sortingManager.Sort();
 
 
