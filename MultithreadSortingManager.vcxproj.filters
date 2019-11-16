@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="src\algorithm">
+      <UniqueIdentifier>{57fa2b6c-e30c-4d2b-92a5-10d45fb52086}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\sortingManager">
+      <UniqueIdentifier>{28341743-b8f2-4bcc-b674-05f433a0f079}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\threadPool">
+      <UniqueIdentifier>{d0288061-a500-4148-9149-3e167770e180}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\tools">
+      <UniqueIdentifier>{5acbfbfc-9e95-4949-a93c-c80edd1b97fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\timer">
+      <UniqueIdentifier>{2da33da8-f811-45b3-82a3-e1718297bdb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\algorithm\QuickSort">
+      <UniqueIdentifier>{f9c78011-904a-42ae-a7c8-ad10cc0f2111}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tools\ToolSet.cpp">
+      <Filter>src\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="src\timer\Timer.cpp">
+      <Filter>src\timer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sortingManager\SortingManager.cpp">
+      <Filter>src\sortingManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\algorithm\QuickSort\QuickSortAlgorithm.cpp">
+      <Filter>src\algorithm\QuickSort</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\tools\ToolSet.h">
+      <Filter>src\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\timer\Timer.h">
+      <Filter>src\timer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\threadPool\ThreadPool.hpp">
+      <Filter>src\threadPool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sortingManager\SortingManager.h">
+      <Filter>src\sortingManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\algorithm\SortAlgorithmBase.h">
+      <Filter>src\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="src\algorithm\QuickSort\QuickSortAlgorithm.h">
+      <Filter>src\algorithm\QuickSort</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
