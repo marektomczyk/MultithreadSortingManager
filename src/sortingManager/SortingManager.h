@@ -21,7 +21,7 @@
 #include "../algorithm/SortAlgorithmBase.h"
 #include "../threadPool/ThreadPool.hpp"
 
-#define CHUNK_SIZE 1000
+#define CHUNK_SIZE 10
 
 class SortingManager
 {

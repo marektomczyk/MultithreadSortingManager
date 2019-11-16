@@ -10,11 +10,14 @@
 #include "sortingManager/SortingManager.h"
 #include "algorithm/QuickSort/QuickSortAlgorithm.h"
 #include "tools/ToolSet.h"
+#include "log/Logger.h"
 
 /// @brief Main function
 int main(int argc, char* argv[])
 {
-	SortingManager sortingManager(std::make_shared<QuickSortAlgorithm>(), "in.txt", 1u);
+	Logger::Init();
+
+	SortingManager sortingManager(std::make_shared<QuickSortAlgorithm>(), "in.txt", 4u);
 	sortingManager.Sort();
 
 	return 0;

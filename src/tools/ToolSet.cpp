@@ -12,6 +12,7 @@
 #include <charconv>
 #include <fstream>
 #include <filesystem>
+#include "../log/Logger.h"
 
 /*****************************************************************************
  *	@brief Write chunk into file
@@ -51,6 +52,7 @@ void ToolSet::WriteChunkIntoFile(const std::vector<int>& sortedChunk,
 			}
 		}
 
+		LOG_TRACE("Chunk {0} saved successfully", chunkCount);
 		outFile.close();
 	}
 }
@@ -70,8 +72,12 @@ void ToolSet::CreateTmpDirectory()
 	bool res = false;
 
 	if (fs::exists("tmp"))
+	{
+		LOG_TRACE("tmp directory actually exist - remove it");
 		fs::remove_all("tmp");
+	}
 
+	LOG_TRACE("Creating tmp directory");
 	fs::create_directories("tmp");
 }
 

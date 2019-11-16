@@ -7,7 +7,7 @@
 //============================================================================
 
 #include "Timer.h"
-#include <iostream> // TODO: Change to logger
+#include "../log/Logger.h"
 
 /// @brief Time measurement of the main thread
 std::shared_ptr<Timer::TimeRecord> Timer::m_mainThreadRecord;
@@ -37,17 +37,17 @@ void Timer::AddRecord(const TimeRecord& record)
 
 void Timer::ShowRecords()
 {
-	// TODO: Logging (use spdlog or other logger)
 	if (m_mainThreadRecord != nullptr)
 	{
-		std::cout << "Main thread: \n";
-		std::cout << m_mainThreadRecord->ToString();
+		LOG_INFO("=========================================");
+		LOG_INFO("Main thread:");
+		LOG_INFO("{0}", m_mainThreadRecord->ToString());
 	}
 
 	for (auto record : m_threadsRecords)
 	{
-		std::cout << "Worker threads: \n";
-		std::cout << record.ToString();
+		LOG_INFO("Worker threads:");
+		LOG_INFO("{0}", record.ToString());
 	}
 }
 

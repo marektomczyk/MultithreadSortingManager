@@ -9,6 +9,7 @@
 #include "SortingManager.h"
 #include "../tools/ToolSet.h"
 #include "../timer/Timer.h"
+#include "../log/Logger.h"
 
 /*****************************************************************************
  *	@brief Class constructor
@@ -22,19 +23,26 @@ SortingManager::SortingManager(const std::shared_ptr<SortAlgorithmBase>& pSortAl
 	if (!fileName.empty())
 	{
 		m_file.open(fileName, std::ios::ate);
-		unsigned long long int fileSize = m_file.tellg();
-
-		if (fileSize < CHUNK_SIZE)
+		if ( m_file.is_open() )
 		{
-			m_chunkCount = (unsigned int) fileSize;
+			unsigned long long int fileSize = m_file.tellg();
+
+			if (fileSize < CHUNK_SIZE)
+			{
+				m_chunkCount = (unsigned int)fileSize;
+			}
+			else
+			{
+				m_chunkCount = (unsigned int)fileSize / CHUNK_SIZE;
+			}
+
+			m_file.seekg(0, m_file.beg);
+			ToolSet::CreateTmpDirectory();
 		}
 		else
 		{
-			m_chunkCount = (unsigned int) fileSize / CHUNK_SIZE;
+			LOG_TRACE("Could not open file {0}", fileName);
 		}
-
-		m_file.seekg(0, m_file.beg);
-		ToolSet::CreateTmpDirectory();
 	}
 }
 
@@ -60,6 +68,7 @@ SortingManager::~SortingManager()
 void SortingManager::Sort()
 {
 	Timer::StartTimer();
+	LOG_TRACE("Sorting manager start working...");
 
 	auto sortedChunkCounter = 0u;
 	ThreadPool threadPool{ m_threadCount };
@@ -68,8 +77,6 @@ void SortingManager::Sort()
 	{
 		while (!threadPool.IsAnyThreadIdle())
 		{
-			// TODO: logging
-			//std::cout << "Waiting for idle thread (10ms)\n";
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 		}
 
@@ -84,6 +91,7 @@ void SortingManager::Sort()
 		}
 	}
 
+	LOG_TRACE("Sorting manager finished");
 	Timer::StopTimer();
 	Timer::ShowRecords();
 }

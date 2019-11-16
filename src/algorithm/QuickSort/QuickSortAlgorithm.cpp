@@ -9,7 +9,6 @@
 #include "QuickSortAlgorithm.h"
 #include "../../tools/ToolSet.h"
 #include "../../timer/Timer.h"
-#include <iostream>
 
 /*****************************************************************************
  *	@brief Sort given chunk of data and write it to new file
@@ -47,7 +46,6 @@ void QuickSortAlgorithm::qSort(std::vector<int>& dataToSort, int low, int high)
 {
 	if (low < high)
 	{
-		// TODO: logging
 		return;
 	}
 
