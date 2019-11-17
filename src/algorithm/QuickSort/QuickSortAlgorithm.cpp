@@ -20,10 +20,10 @@
  ****************************************************************************/
 void QuickSortAlgorithm::Sort(std::vector<int>* chunk, unsigned int chunkCount)
 {
-	if ((chunk != nullptr) && (!chunk->empty()))
+	if ( ( chunk != nullptr ) && ( !chunk->empty() ) )
 	{
 		Timer::TimeRecord record;
-		qSort(*chunk, 0, chunk->size());
+		qSort(*chunk, 0, chunk->size() - 1);
 		record.Stop();
 		Timer::AddRecord(record);
 
@@ -42,16 +42,14 @@ void QuickSortAlgorithm::Sort(std::vector<int>* chunk, unsigned int chunkCount)
  *
  *	@return None
  ****************************************************************************/
-void QuickSortAlgorithm::qSort(std::vector<int>& dataToSort, int low, int high)
+void QuickSortAlgorithm::qSort(std::vector<int>& dataToSort, int left, int right)
 {
-	if (low < high)
+	if ( left < right )
 	{
-		return;
+		int pivotIndex = partition(dataToSort, left, right);
+		qSort(dataToSort, left, pivotIndex - 1);
+		qSort(dataToSort, pivotIndex, right);
 	}
-
-	int pivot = partition(dataToSort, low, high);
-	qSort(dataToSort, low, pivot - 1);
-	qSort(dataToSort, pivot + 1, high);
 }
 
 /*****************************************************************************
@@ -63,27 +61,30 @@ void QuickSortAlgorithm::qSort(std::vector<int>& dataToSort, int low, int high)
  *
  *	@return Pivot
  ****************************************************************************/
-const int QuickSortAlgorithm::partition(std::vector<int>& dataToSort, int low, int high)
+int QuickSortAlgorithm::partition(std::vector<int>& dataToSort, int left, int right)
 {
-	int left = low;
-	int right = high;
-	int v = dataToSort[left];
+	int pivotIndex = left + (right - left) / 2;
+	int pivotValue = dataToSort[pivotIndex];
+	int tmp;
 
-	while (left < right)
+	while ( left <= right )
 	{
-		while (dataToSort[left] <= v)
+		while ( dataToSort[left] < pivotValue )
 			left++;
-		while (dataToSort[right] > v)
+		while ( dataToSort[right] > pivotValue )
 			right--;
 
-		if (left < right)
+		if ( left <= right )
 		{
-			std::swap(dataToSort[left], dataToSort[right]);
+			tmp = dataToSort[left];
+			dataToSort[left] = dataToSort[right];
+			dataToSort[right] = tmp;
+			left++;
+			right--;
 		}
 	}
 
-	std::swap(dataToSort[left], dataToSort[right]);
-	return right;
+	return left;
 }
 //----------------------------------------------------------------------------
 // End of file ---------------------------------------------------------------

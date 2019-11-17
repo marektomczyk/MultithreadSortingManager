@@ -26,9 +26,9 @@ public:
 
 private:
 	/// @brief Quick sort method
-	void qSort(std::vector<int>& dataToSort, int low, int high);
+	void qSort(std::vector<int>& dataToSort, int left, int right);
 	/// @brief Partition data for sorting
-	const int partition(std::vector<int>& dataToSort, int low, int high);
+	int partition(std::vector<int>& dataToSort, int left, int right);
 };
 
 #endif /* ALGORITHM_QUICKSORTALGORITHM_H_ */
