@@ -18,16 +18,16 @@
  *
  *	@return None
  ****************************************************************************/
-void QuickSortAlgorithm::Sort(std::vector<int>* chunk, unsigned int chunkCount)
+void QuickSortAlgorithm::Sort(std::vector<std::byte>* chunk, unsigned int chunkCount)
 {
 	if ( ( chunk != nullptr ) && ( !chunk->empty() ) )
 	{
 		Timer::TimeRecord record;
-		qSort(*chunk, 0, chunk->size() - 1);
+		//qSort(*chunk, 0, chunk->size() - 1);
 		record.Stop();
 		Timer::AddRecord(record);
 
-		ToolSet::WriteChunkIntoFile(*chunk, chunkCount);
+		//ToolSet::WriteChunkIntoFile(*chunk, chunkCount);
 	}
 
 	delete chunk;

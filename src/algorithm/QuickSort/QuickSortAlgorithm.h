@@ -19,7 +19,7 @@ public:
 		: SortAlgorithmBase("QuickSort") { }
 
 	/// @brief Sort method
-	void Sort(std::vector<int>* chunk, unsigned int chunkCount) final;
+	void Sort(std::vector<std::byte>* chunk, unsigned int chunkCount) final;
 
 	/// @brief Class destructor
 	~QuickSortAlgorithm() = default;
