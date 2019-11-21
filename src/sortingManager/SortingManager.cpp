@@ -34,7 +34,7 @@ SortingManager::SortingManager(const std::shared_ptr<SortAlgorithmBase>& pSortAl
 			if ( fileSize < MAX_RAM_USAGE )
 			{
 				m_chunkCount = 1u;
-				m_chunkSize = fileSize;
+				m_chunkSize = (unsigned int) fileSize;
 			}
 			else
 			{
