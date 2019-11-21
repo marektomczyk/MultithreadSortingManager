@@ -15,10 +15,13 @@
 /// @brief Main function
 int main(int argc, char* argv[])
 {
+	// Init logger
 	Logger::Init();
 
+	// Create sorting manager
 	SortingManager sortingManager(std::make_shared<QuickSortAlgorithm>(), "in.txt", 4u);
-	sortingManager.Sort();
+	// Run sorting manager
+	sortingManager.Run();
 
 	return 0;
 }
