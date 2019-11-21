@@ -27,7 +27,7 @@ public:
 	inline const std::string GetName() const { return m_algorithmName; }
 
 	/// @brief Sort function
-	virtual void Sort(std::vector<int>* chunk, unsigned int chunkCount) = 0;
+	virtual void Sort(std::vector<std::byte>* chunk, unsigned int chunkCount) = 0;
 
 private:
 	/// @brief Algortihm name
