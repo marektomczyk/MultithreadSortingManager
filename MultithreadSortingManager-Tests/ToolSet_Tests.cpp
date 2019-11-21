@@ -175,6 +175,50 @@ TEST(ToolSetTest, readChunkFromUntilDelim2)
 	EXPECT_TRUE(result);
 }
 
+TEST(ToolSetTest, splitAndConvertTest)
+{
+	std::vector<std::byte> bytes =
+	{ std::byte{'1'}, std::byte{'2'},
+		std::byte{'3'}, std::byte{'4'},
+		std::byte{'5'}, std::byte{'6'},
+		std::byte{' '}, std::byte{' '},
+		std::byte{'5'}, std::byte{'6'},
+		std::byte{'7'}, std::byte{' '},
+		std::byte{'8'}, std::byte{' '},
+		std::byte{'9'}, std::byte{'1'},
+		std::byte{'0'}, std::byte{' '},
+		std::byte{'1'}, std::byte{'2'}
+	};
+
+	std::vector<int> verify =
+	{
+		123456, 567, 8, 910, 12
+	};
+
+	bool result = true;
+	std::vector<int> coverted;
+	ToolSet::SplitAndConvert(bytes, coverted);
+	
+	if ( !coverted.empty() )
+	{
+		for ( int i = 0; i < verify.size(); ++i )
+		{
+			if ( coverted[i] != verify[i] )
+			{
+				result = false;
+				break;
+			}
+		}
+	}
+
+	if ( result && ( !bytes.empty() || coverted.empty() ) )
+	{
+		result = false;
+	}
+
+	EXPECT_TRUE(result);
+}
+
 //----------------------------------------------------------------------------
 // End of file ---------------------------------------------------------------
 //----------------------------------------------------------------------------
