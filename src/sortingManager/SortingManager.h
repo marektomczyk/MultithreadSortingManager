@@ -21,24 +21,21 @@
 #include "../algorithm/SortAlgorithmBase.h"
 #include "../threadPool/ThreadPool.hpp"
 
-#define CHUNK_SIZE 10
+#define CHUNK_SIZE 1000000
 
 class SortingManager
 {
 public:
 	/// @brief Class constructor
 	SortingManager(const std::shared_ptr<SortAlgorithmBase>& pSortAlgorithm,
-		std::string fileName,
+		std::string const& fileName,
 		unsigned int threadCount = std::thread::hardware_concurrency());
 	/// @brief Class destructor
 	virtual ~SortingManager();
-	/// @brief Sorting method
-	void Sort();
+	/// @brief 
+	void Run();
 
 private:
-	/// @brief Returns read chunk from input file
-	std::vector<int>* readChunkFromFile();
-
 	/// @brief Pointer to sort algorithm
 	std::shared_ptr<SortAlgorithmBase>     m_sortAlgorithm;
 	/// @brief Count of worker thread
@@ -49,6 +46,15 @@ private:
 	unsigned int 						           		 m_chunkCount;
 	/// @brief Access control mutex
 	std::mutex							           		 m_mutex;
+
+	/// @brief Before sort
+	void beforeRun();
+	/// @brief Sorting method
+	void sort();
+	/// @brief Merge sorted chunks
+	void merge();
+	/// @brief After sort
+	void afterRun();
 };
 
 #endif /* SORTINGMANAGER_H_ */

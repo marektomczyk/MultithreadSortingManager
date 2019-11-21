@@ -10,24 +10,27 @@
 #include "../tools/ToolSet.h"
 #include "../timer/Timer.h"
 #include "../log/Logger.h"
+#include <filesystem>
 
 /*****************************************************************************
  *	@brief Class constructor
  *
  ****************************************************************************/
-SortingManager::SortingManager(const std::shared_ptr<SortAlgorithmBase>& pSortAlgorithm, std::string fileName, const unsigned int threadCount)
+SortingManager::SortingManager(const std::shared_ptr<SortAlgorithmBase>& pSortAlgorithm,
+															 std::string const& fileName, 
+															 const unsigned int threadCount)
 	: m_sortAlgorithm(pSortAlgorithm),
 	m_threadCount(threadCount),
 	m_chunkCount(0)
 {
-	if (!fileName.empty())
+	if ( !fileName.empty() )
 	{
-		m_file.open(fileName, std::ios::ate);
+		m_file.open(fileName, std::ios::binary);
 		if ( m_file.is_open() )
 		{
-			unsigned long long int fileSize = m_file.tellg();
+			auto fileSize = std::filesystem::file_size(fileName);
 
-			if (fileSize < CHUNK_SIZE)
+			if ( fileSize < CHUNK_SIZE)
 			{
 				m_chunkCount = (unsigned int)fileSize;
 			}
@@ -36,7 +39,6 @@ SortingManager::SortingManager(const std::shared_ptr<SortAlgorithmBase>& pSortAl
 				m_chunkCount = (unsigned int)fileSize / CHUNK_SIZE;
 			}
 
-			m_file.seekg(0, m_file.beg);
 			ToolSet::CreateTmpDirectory();
 		}
 		else
@@ -52,77 +54,105 @@ SortingManager::SortingManager(const std::shared_ptr<SortAlgorithmBase>& pSortAl
  ****************************************************************************/
 SortingManager::~SortingManager()
 {
-	if (m_file.is_open())
+	if ( m_file.is_open() )
 	{
 		m_file.close();
 	}
 }
 
 /*****************************************************************************
- *	@brief Perform all steps needed to sort data
+ *	@brief Perform all steps needed to sort data:
+ *				 1) Start timer
+ *				 2) Sort data in parallel
+ *			   3) Merge sorted chunks into one output file
+ *			   4) Stop timer
+ *         5) Show results on the console screen
  *
  *	@param None
  *
  *	@return None
  ****************************************************************************/
-void SortingManager::Sort()
+void SortingManager::Run()
+{
+	beforeRun();
+	sort();
+	merge();
+	afterRun();
+}
+
+/*****************************************************************************
+ *	@brief Method called before sorting
+ *
+ *	@param None
+ *
+ *	@return None
+ ****************************************************************************/
+void SortingManager::beforeRun()
 {
 	Timer::StartTimer();
-	LOG_TRACE("Sorting manager start working...");
+	LOG_INFO("Sorting manager start working...");
+}
 
-	auto sortedChunkCounter = 0u;
-	ThreadPool threadPool{ m_threadCount };
-
-	while (sortedChunkCounter < m_chunkCount)
-	{
-		while (!threadPool.IsAnyThreadIdle())
-		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(10));
-		}
-
-		if (threadPool.IsAnyThreadIdle())
-		{
-			auto chunk = readChunkFromFile();
-			if (chunk != nullptr)
-			{
-				(void)threadPool.AddTask(&SortAlgorithmBase::Sort, m_sortAlgorithm, chunk, sortedChunkCounter);
-				++sortedChunkCounter;
-			}
-		}
-	}
-
-	LOG_TRACE("Sorting manager finished");
+/*****************************************************************************
+ *	@brief Method called after sorting
+ *
+ *	@param None
+ *
+ *	@return None
+ ****************************************************************************/
+void SortingManager::afterRun()
+{
+	LOG_INFO("Sorting manager finished");
 	Timer::StopTimer();
 	Timer::ShowRecords();
 }
 
 /*****************************************************************************
- *	@brief Reads chunk of data from file
+ *	@brief Sort data method
  *
  *	@param None
  *
- *	@return Chunk from file in bytes
+ *	@return None
  ****************************************************************************/
-std::vector<int>* SortingManager::readChunkFromFile()
+void SortingManager::sort()
 {
-	std::vector<int>* chunk = nullptr;
+	auto sortedChunkCounter = 0u;
+	ThreadPool threadPool{ m_threadCount };
 
-	if (m_file.is_open())
+	while ( sortedChunkCounter < m_chunkCount )
 	{
-		chunk = new std::vector<int>();
-		if (chunk != nullptr)
+		while ( !threadPool.IsAnyThreadIdle() )
 		{
-			int number;
-			int counter = 0;
-			while ((counter < CHUNK_SIZE) && (m_file >> number))
+			std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		}
+
+		if ( threadPool.IsAnyThreadIdle() )
+		{
+			std::vector<std::byte>* chunk = new std::vector<std::byte>();
+						
+			if ( chunk != nullptr )
 			{
-				++counter;
-				chunk->push_back(number);
+				if ( ToolSet::ReadChunkFromFile(m_file, *chunk, CHUNK_SIZE) )
+				{
+					(void)threadPool.AddTask(&SortAlgorithmBase::Sort, m_sortAlgorithm, chunk, sortedChunkCounter);
+					++sortedChunkCounter;
+				}
 			}
 		}
 	}
+}
 
-	return chunk;
+/*****************************************************************************
+ *	@brief Merge sorted chunks into one output file
+ *
+ *	@param None
+ *
+ *	@return None
+ ****************************************************************************/
+void SortingManager::merge()
+{
+	auto mergedChunksCounter = 0u;
+	ThreadPool threadPool{ m_threadCount };
 }
 
 //----------------------------------------------------------------------------
