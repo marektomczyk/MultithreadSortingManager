@@ -22,12 +22,15 @@ void QuickSortAlgorithm::Sort(std::vector<std::byte>* chunk, unsigned int chunkC
 {
 	if ( ( chunk != nullptr ) && ( !chunk->empty() ) )
 	{
+		std::vector<int> dataToSort;
+		ToolSet::SplitAndConvert(*chunk, dataToSort);
+
 		Timer::TimeRecord record;
-		//qSort(*chunk, 0, chunk->size() - 1);
+		qSort(dataToSort, 0, dataToSort.size() - 1);
 		record.Stop();
 		Timer::AddRecord(record);
 
-		//ToolSet::WriteChunkIntoFile(*chunk, chunkCount);
+		ToolSet::WriteChunkIntoFile(dataToSort, chunkCount);
 	}
 
 	delete chunk;
