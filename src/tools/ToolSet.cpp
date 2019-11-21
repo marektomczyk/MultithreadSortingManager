@@ -127,7 +127,8 @@ void ToolSet::SplitAndConvert(
 		do
 		{
 			auto iterator = bytes.begin();
-			if ( *iterator != delim )
+			if ( ( *iterator != delim ) && 
+				    std::isdigit(static_cast<unsigned char>(*iterator)) )
 			{
 				stream << (int)((char) *iterator - '0');
 			}
