@@ -21,7 +21,7 @@
 #include "../algorithm/SortAlgorithmBase.h"
 #include "../threadPool/ThreadPool.hpp"
 
-#define CHUNK_SIZE 1000000
+#define MAX_RAM_USAGE 1000000000
 
 class SortingManager
 {
@@ -44,6 +44,8 @@ private:
 	std::ifstream 								     		 m_file;
 	/// @brief Count of chunk to sort
 	unsigned int 						           		 m_chunkCount;
+	/// @brief Chunk size
+	unsigned int    									     m_chunkSize;
 	/// @brief Access control mutex
 	std::mutex							           		 m_mutex;
 

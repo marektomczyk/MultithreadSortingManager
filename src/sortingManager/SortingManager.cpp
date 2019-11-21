@@ -20,8 +20,9 @@ SortingManager::SortingManager(const std::shared_ptr<SortAlgorithmBase>& pSortAl
 															 std::string const& fileName, 
 															 const unsigned int threadCount)
 	: m_sortAlgorithm(pSortAlgorithm),
-	m_threadCount(threadCount),
-	m_chunkCount(0)
+		m_threadCount(threadCount),
+		m_chunkCount(0),
+		m_chunkSize(0)
 {
 	if ( !fileName.empty() )
 	{
@@ -30,13 +31,15 @@ SortingManager::SortingManager(const std::shared_ptr<SortAlgorithmBase>& pSortAl
 		{
 			auto fileSize = std::filesystem::file_size(fileName);
 
-			if ( fileSize < CHUNK_SIZE)
+			if ( fileSize < MAX_RAM_USAGE )
 			{
-				m_chunkCount = (unsigned int)fileSize;
+				m_chunkCount = 1u;
+				m_chunkSize = fileSize;
 			}
 			else
 			{
-				m_chunkCount = (unsigned int)fileSize / CHUNK_SIZE;
+				m_chunkSize = (unsigned int) MAX_RAM_USAGE / m_threadCount;
+				m_chunkCount = (unsigned int) fileSize / m_chunkSize;
 			}
 
 			ToolSet::CreateTmpDirectory();
@@ -132,7 +135,7 @@ void SortingManager::sort()
 						
 			if ( chunk != nullptr )
 			{
-				if ( ToolSet::ReadChunkFromFile(m_file, *chunk, CHUNK_SIZE) )
+				if ( ToolSet::ReadChunkFromFile(m_file, *chunk, m_chunkSize) )
 				{
 					(void)threadPool.AddTask(&SortAlgorithmBase::Sort, m_sortAlgorithm, chunk, sortedChunkCounter);
 					++sortedChunkCounter;
