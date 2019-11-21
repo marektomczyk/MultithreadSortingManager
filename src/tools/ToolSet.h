@@ -25,7 +25,7 @@ public:
 	/// @brief Convert from bytes to integers
 	static void SplitAndConvert(
 		std::vector<std::byte>& bytes, std::vector<int>& numbers,
-		const std::byte delim = std::byte{ 0x32 });
+		const std::byte delim = std::byte{ 0x20 });
 	/// @brief Create tmp directory
 	static void CreateTmpDirectory();
 };

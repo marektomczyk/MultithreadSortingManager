@@ -101,7 +101,7 @@ bool ToolSet::ReadChunkFromFile(
 				file.read((char*) &byte, sizeof(std::byte));
 				if ( file )
 					chunk.push_back(byte);
-			} while ( ( byte != delim ) || ( !file ) );
+			} while ( ( byte != delim ) && ( file ) );
 		}
 	}
 	return result;
@@ -123,22 +123,36 @@ void ToolSet::SplitAndConvert(
 {
 	if ( !bytes.empty() )
 	{
-		auto iterator = bytes.begin();
+		std::stringstream stream;
 		do
 		{
-			if ( ( iterator != bytes.end() ) && ( *iterator != delim ) )
+			auto iterator = bytes.begin();
+			if ( *iterator != delim )
 			{
-				numbers.push_back((int) *iterator);
-				bytes.erase(iterator);
+				stream << (int)((char) *iterator - '0');
 			}
+			else
+			{
+				if ( stream.tellp() != 0 )
+				{
+					int tmp;
+					stream >> tmp;
+					numbers.push_back(tmp);
+					stream.str("");
+					stream.clear();
+				}
+			}
+			bytes.erase(iterator);
+		} while ( !bytes.empty() );
 
-			iterator = std::find_if(iterator, bytes.end(),
-				[&](const std::byte& byte) -> bool { return byte == delim; });
-
-			if ( iterator != bytes.end() )
-				bytes.erase(iterator);
-
-		} while ( iterator != bytes.end() );
+		if ( stream.tellp() != 0 )
+		{
+			int tmp;
+			stream >> tmp;
+			numbers.push_back(tmp);
+			stream.str("");
+			stream.clear();
+		}
 	}
 }
 
