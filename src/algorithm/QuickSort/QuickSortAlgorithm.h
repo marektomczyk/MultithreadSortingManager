@@ -17,12 +17,10 @@ public:
 	/// @brief Class constructor
 	QuickSortAlgorithm()
 		: SortAlgorithmBase("QuickSort") { }
-
-	/// @brief Sort method
-	void Sort(std::vector<std::byte>* chunk, unsigned int chunkCount) final;
-
 	/// @brief Class destructor
 	~QuickSortAlgorithm() = default;
+	/// @brief Sort method
+	void Sort(std::vector<std::byte>* chunk, unsigned int chunkCount) final;
 
 private:
 	/// @brief Quick sort method

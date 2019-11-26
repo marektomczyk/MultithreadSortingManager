@@ -9,6 +9,7 @@
 #include "QuickSortAlgorithm.h"
 #include "../../tools/ToolSet.h"
 #include "../../timer/Timer.h"
+#include "../../log/Logger.h"
 
 /*****************************************************************************
  *	@brief Sort given chunk of data and write it to new file
@@ -18,18 +19,21 @@
  *
  *	@return None
  ****************************************************************************/
-void QuickSortAlgorithm::Sort(std::vector<std::byte>* chunk, unsigned int chunkCount)
+void QuickSortAlgorithm::Sort(
+	std::vector<std::byte>* chunk, unsigned int chunkCount)
 {
 	if ( ( chunk != nullptr ) && ( !chunk->empty() ) )
 	{
 		std::vector<int> dataToSort;
 		ToolSet::SplitAndConvert(*chunk, dataToSort);
+		LOG_TRACE("Sorting stared");
 
 		Timer::TimeRecord record;
 		qSort(dataToSort, 0, dataToSort.size() - 1);
 		record.Stop();
 		Timer::AddRecord(record);
 
+		LOG_TRACE("Finished sorting");
 		ToolSet::WriteChunkIntoFile(dataToSort, chunkCount);
 	}
 
@@ -45,7 +49,8 @@ void QuickSortAlgorithm::Sort(std::vector<std::byte>* chunk, unsigned int chunkC
  *
  *	@return None
  ****************************************************************************/
-void QuickSortAlgorithm::qSort(std::vector<int>& dataToSort, int left, int right)
+void QuickSortAlgorithm::qSort(
+	std::vector<int>& dataToSort, int left, int right)
 {
 	if ( left < right )
 	{
@@ -64,7 +69,8 @@ void QuickSortAlgorithm::qSort(std::vector<int>& dataToSort, int left, int right
  *
  *	@return Pivot
  ****************************************************************************/
-int QuickSortAlgorithm::partition(std::vector<int>& dataToSort, int left, int right)
+int QuickSortAlgorithm::partition(
+	std::vector<int>& dataToSort, int left, int right)
 {
 	int pivotIndex = left + (right - left) / 2;
 	int pivotValue = dataToSort[pivotIndex];
