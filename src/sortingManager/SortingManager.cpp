@@ -11,6 +11,7 @@
 #include "../timer/Timer.h"
 #include "../log/Logger.h"
 #include <filesystem>
+#include <queue>
 
 /*****************************************************************************
  *	@brief Class constructor
@@ -26,6 +27,12 @@ SortingManager::SortingManager(const std::shared_ptr<SortAlgorithmBase>& pSortAl
 {
 	if ( !fileName.empty() )
 	{
+		if ( ( m_threadCount == 0 ) || ( m_threadCount > std::thread::hardware_concurrency() ) )
+		{
+			LOG_WARN("Invalid thread count number - changed to {0}", std::thread::hardware_concurrency());
+			m_threadCount = std::thread::hardware_concurrency();
+		}
+
 		m_file.open(fileName, std::ios::binary);
 		if ( m_file.is_open() )
 		{
@@ -39,14 +46,20 @@ SortingManager::SortingManager(const std::shared_ptr<SortAlgorithmBase>& pSortAl
 			else
 			{
 				m_chunkSize = (unsigned int) MAX_RAM_USAGE / m_threadCount;
-				m_chunkCount = (unsigned int) fileSize / m_chunkSize;
+				m_chunkCount = (unsigned int) (fileSize / m_chunkSize);
+
+				if ( m_chunkCount > _getmaxstdio() )
+				{
+					auto maxstdio = _getmaxstdio();
+					_setmaxstdio(m_chunkCount + maxstdio);
+				}
 			}
 
 			ToolSet::CreateTmpDirectory();
 		}
 		else
 		{
-			LOG_TRACE("Could not open file {0}", fileName);
+			LOG_ERROR("Could not open file {0}", fileName);
 		}
 	}
 }
@@ -154,8 +167,53 @@ void SortingManager::sort()
  ****************************************************************************/
 void SortingManager::merge()
 {
-	auto mergedChunksCounter = 0u;
-	ThreadPool threadPool{ m_threadCount };
+	LOG_INFO("Merge temporary files started");
+
+	auto comparator = [](const std::pair<int, int>& p1, const std::pair<int, int>& p2) { return p1.first > p2.first; };
+	std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int> >, decltype(comparator)> minHeap(comparator);
+
+	std::unique_ptr<std::ifstream[]> handles = std::make_unique<std::ifstream[]>(m_chunkCount);
+	if (handles == nullptr)
+		LOG_ERROR("No enough memory!");
+
+	for ( unsigned int i = 0; i < m_chunkCount; i++ )
+	{
+		std::string sortedInputFileName = "tmp//" + std::to_string(i) + ".txt";
+		handles[i].open(sortedInputFileName.c_str());
+		if ( handles[i].is_open() )
+		{
+			int firstValue;
+			handles[i] >> firstValue;
+			minHeap.push(std::pair<int, int>(firstValue, i));
+		}
+		else
+			LOG_ERROR("Could not open {0} file", sortedInputFileName);
+	}
+
+	std::ofstream outputFile("output.txt");
+	if ( outputFile.is_open() )
+	{
+		while ( minHeap.size() > 0 )
+		{
+			auto minPair = minHeap.top();
+			minHeap.pop();
+			outputFile << minPair.first << '\n';
+			int nextValue;
+			flush(outputFile);
+			if ( handles[minPair.second] >> nextValue )
+			{
+				minHeap.push(std::pair <int, int>(nextValue, minPair.second));
+			}
+		}
+		outputFile.close();
+	}
+	else
+		LOG_ERROR("Could not create output file!");
+
+	for (unsigned int i = 0; i < m_chunkCount; ++i)
+		handles[i].close();
+
+	LOG_INFO("Merge temporary files finished");
 }
 
 //----------------------------------------------------------------------------

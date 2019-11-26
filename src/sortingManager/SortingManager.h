@@ -39,7 +39,7 @@ private:
 	/// @brief Pointer to sort algorithm
 	std::shared_ptr<SortAlgorithmBase>     m_sortAlgorithm;
 	/// @brief Count of worker thread
-	const unsigned int                 		 m_threadCount;
+	unsigned int                 		       m_threadCount;
 	/// @brief Input file stream
 	std::ifstream 								     		 m_file;
 	/// @brief Count of chunk to sort
