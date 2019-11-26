@@ -5,6 +5,7 @@
 
 # Test files
 in.txt
+output.txt
 tmp/
 
 # User-specific files
