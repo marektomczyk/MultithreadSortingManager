@@ -52,9 +52,7 @@ bool ToolSet::WriteChunkIntoFile(
 		}
 
 		result = true;
-#if 0
 		LOG_TRACE("Chunk {0} saved successfully", chunkCount);
-#endif
 		outFile.close();
 	}
 
@@ -173,15 +171,11 @@ void ToolSet::CreateTmpDirectory()
 
 	if (fs::exists("tmp"))
 	{
-#if 0
 		LOG_TRACE("tmp directory actually exist - remove it");
-#endif
 		fs::remove_all("tmp");
 	}
 
-#if 0
 	LOG_TRACE("Creating tmp directory");
-#endif
 	fs::create_directories("tmp");
 }
 
