@@ -129,6 +129,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\algorithm\BitonicSort\BitonicSortAlgorithm.cpp" />
     <ClCompile Include="src\algorithm\QuickSort\QuickSortAlgorithm.cpp" />
     <ClCompile Include="src\log\Logger.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -137,6 +138,7 @@
     <ClCompile Include="src\tools\ToolSet.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\algorithm\BitonicSort\BitonicSortAlgorithm.h" />
     <ClInclude Include="src\algorithm\QuickSort\QuickSortAlgorithm.h" />
     <ClInclude Include="src\algorithm\SortAlgorithmBase.h" />
     <ClInclude Include="src\log\Logger.h" />

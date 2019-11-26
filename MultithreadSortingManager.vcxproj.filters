@@ -26,6 +26,9 @@
     <Filter Include="src\log">
       <UniqueIdentifier>{d253bbf2-6c25-4268-b90d-a272321899d5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\algorithm\BitonicSort">
+      <UniqueIdentifier>{df3264a3-dca5-4ecd-bf14-06a810b5fbf8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -45,6 +48,9 @@
     </ClCompile>
     <ClCompile Include="src\log\Logger.cpp">
       <Filter>src\log</Filter>
+    </ClCompile>
+    <ClCompile Include="src\algorithm\BitonicSort\BitonicSortAlgorithm.cpp">
+      <Filter>src\algorithm\BitonicSort</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -68,6 +74,9 @@
     </ClInclude>
     <ClInclude Include="src\log\Logger.h">
       <Filter>src\log</Filter>
+    </ClInclude>
+    <ClInclude Include="src\algorithm\BitonicSort\BitonicSortAlgorithm.h">
+      <Filter>src\algorithm\BitonicSort</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
