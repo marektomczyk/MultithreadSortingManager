@@ -20,21 +20,19 @@
  *	@return None
  ****************************************************************************/
 void QuickSortAlgorithm::Sort(
-	std::vector<std::byte>* chunk, unsigned int chunkCount)
+	std::vector<int>* chunk, unsigned int chunkCount)
 {
 	if ( ( chunk != nullptr ) && ( !chunk->empty() ) )
 	{
-		std::vector<int> dataToSort;
-		ToolSet::SplitAndConvert(*chunk, dataToSort);
 		LOG_TRACE("Sorting stared");
 
 		Timer::TimeRecord record;
-		qSort(dataToSort, 0, dataToSort.size() - 1);
+		qSort(*chunk, 0, chunk->size() - 1);
 		record.Stop();
 		Timer::AddRecord(record);
 
 		LOG_TRACE("Finished sorting");
-		ToolSet::WriteChunkIntoFile(dataToSort, chunkCount);
+		ToolSet::WriteChunkIntoFile(*chunk, chunkCount);
 	}
 
 	delete chunk;

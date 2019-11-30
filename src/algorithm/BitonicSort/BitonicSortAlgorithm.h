@@ -20,7 +20,7 @@ public:
 	/// @brief Class destructor
 	~BitonicSortAlgorithm() = default;
 	/// @brief Sort method
-	void Sort(std::vector<std::byte>* chunk, unsigned int chunkCount) final;
+	void Sort(std::vector<int>* chunk, unsigned int chunkCount) final;
 
 private:
 	/// @brief Bitonic sort algorithm implementation

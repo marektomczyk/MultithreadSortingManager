@@ -20,18 +20,14 @@
  *	@return None
  ****************************************************************************/
 void BitonicSortAlgorithm::Sort(
-	std::vector<std::byte>* chunk, unsigned int chunkCount)
+	std::vector<int>* chunk, unsigned int chunkCount)
 {
-	if ((chunk != nullptr) && (!chunk->empty()))
+	if ( ( chunk != nullptr ) && ( !chunk->empty() ) )
 	{
-		std::vector<int> dataToSort;
-		ToolSet::SplitAndConvert(*chunk, dataToSort);
 		//LOG_TRACE("Sorting stared");
 
 		//Timer::TimeRecord record;
-		bSort(dataToSort, 0, dataToSort.size(), true);
-		for (auto num : dataToSort)
-			LOG_TRACE("{0}\n", num);
+		bSort(*chunk, 0, chunk->size(), true);
 		//record.Stop();
 		//Timer::AddRecord(record);
 
