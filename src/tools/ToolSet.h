@@ -22,12 +22,17 @@ public:
 	static bool ReadChunkFromFile(
 		std::ifstream& file, std::vector<std::byte>& chunk, 
 		std::size_t chunkSize, std::byte delim = std::byte{ 0x20 });
+	/// @brief Read chunk from given file
+	static bool ReadChunkFromFile(
+		std::ifstream& file, std::vector<int>& chunk, std::size_t chunkSize);
 	/// @brief Convert from bytes to integers
 	static void SplitAndConvert(
 		std::vector<std::byte>& bytes, std::vector<int>& numbers,
 		const std::byte delim = std::byte{ 0x20 });
 	/// @brief Create tmp directory
 	static void CreateTmpDirectory();
+	/// @brief Check if number is power of two
+	static bool CheckIfIsPowerOfTwo(std::uintmax_t number);
 };
 
 #endif /* TOOLS_TOOLSET_H_ */

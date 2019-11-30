@@ -31,28 +31,17 @@ bool ToolSet::WriteChunkIntoFile(
 	if ( sortedChunk.empty() )
 		return false;
 
-	std::string path = "tmp/" + std::to_string(chunkCount) + ".txt";
-	std::ofstream outFile(path);
+	std::string path = "tmp//" + std::to_string(chunkCount) + ".bin";
+	std::ofstream outFile(path, std::ios::binary);
 
 	if ( outFile.is_open() )
 	{
-		const unsigned int numInRow = 10;
-		unsigned int numCounter = numInRow;
-
-		for ( auto num : sortedChunk )
+		outFile.write((char*) sortedChunk.data(), (std::streamsize) sortedChunk.size() * sizeof(sortedChunk[0]));
+		if ( outFile )
 		{
-			outFile << num << " ";
-
-			--numCounter;
-			if ( numCounter == 0 )
-			{
-				numCounter = numInRow;
-				outFile << "\n";
-			}
+			result = true;
+			LOG_TRACE("Chunk {0} saved successfully", chunkCount);
 		}
-
-		result = true;
-		LOG_TRACE("Chunk {0} saved successfully", chunkCount);
 		outFile.close();
 	}
 
@@ -102,6 +91,35 @@ bool ToolSet::ReadChunkFromFile(
 			} while ( ( byte != delim ) && ( file ) );
 		}
 	}
+	return result;
+}
+
+/*****************************************************************************
+ *	@brief  Reads data chunk from file
+ *
+ *	@param  file  - file with data
+ *  @param  chunk - vector into which the data will be loaded
+ *  @param  chunkSize - chunk size
+ *
+ *	@return true  - when successfully created
+ *	        false - otherwise
+ ****************************************************************************/
+bool ToolSet::ReadChunkFromFile(
+	std::ifstream& file, std::vector<int>& chunk, std::size_t chunkSize)
+{
+	bool result = true;
+	if ( !file.is_open() )
+		result = false;
+
+	if ( chunk.capacity() != chunkSize )
+		chunk.resize(chunkSize);
+
+	if ( result )
+		file.read((char*) chunk.data(), (std::streamsize) chunkSize * sizeof(chunk[0]));
+
+	if ( chunk.empty() )
+		result = false;
+	
 	return result;
 }
 
@@ -177,6 +195,11 @@ void ToolSet::CreateTmpDirectory()
 
 	LOG_TRACE("Creating tmp directory");
 	fs::create_directories("tmp");
+}
+
+bool ToolSet::CheckIfIsPowerOfTwo(std::uintmax_t number)
+{
+	return ( number != 0 ) && ( (number & ( number - 1 ) ) == 0 );
 }
 
 //----------------------------------------------------------------------------
