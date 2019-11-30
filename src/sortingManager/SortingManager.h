@@ -21,7 +21,7 @@
 #include "../algorithm/SortAlgorithmBase.h"
 #include "../threadPool/ThreadPool.hpp"
 
-#define MAX_RAM_USAGE 1000000000
+#define MAX_RAM_USAGE 40 * sizeof(int)
 
 class SortingManager
 {

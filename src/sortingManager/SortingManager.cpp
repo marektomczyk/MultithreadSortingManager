@@ -27,16 +27,16 @@ SortingManager::SortingManager(const std::shared_ptr<SortAlgorithmBase>& pSortAl
 {
 	if ( !fileName.empty() )
 	{
-		if ( ( m_threadCount == 0 ) || ( m_threadCount > std::thread::hardware_concurrency() ) )
-		{
-			LOG_WARN("Invalid thread count number - changed to {0}", std::thread::hardware_concurrency());
-			m_threadCount = std::thread::hardware_concurrency();
-		}
-
 		m_file.open(fileName, std::ios::binary);
 		if ( m_file.is_open() )
 		{
 			auto fileSize = std::filesystem::file_size(fileName);
+			if ( !ToolSet::CheckIfIsPowerOfTwo(fileSize) )
+			{
+				LOG_ERROR("Filesize is not power of two! Could not sort this file.");
+				m_file.close();
+				return;
+			}
 
 			if ( fileSize < MAX_RAM_USAGE )
 			{
@@ -45,8 +45,8 @@ SortingManager::SortingManager(const std::shared_ptr<SortAlgorithmBase>& pSortAl
 			}
 			else
 			{
-				m_chunkSize = (unsigned int) MAX_RAM_USAGE / m_threadCount;
-				m_chunkCount = (unsigned int) (fileSize / m_chunkSize);
+				m_chunkSize = (unsigned int) (MAX_RAM_USAGE / m_threadCount) / sizeof(int);
+				m_chunkCount = (unsigned int) (fileSize / (m_chunkSize * (std::uintmax_t) sizeof(int)));
 
 				if ( m_chunkCount > _getmaxstdio() )
 				{
@@ -90,6 +90,9 @@ SortingManager::~SortingManager()
  ****************************************************************************/
 void SortingManager::Run()
 {
+	if ( !m_file.is_open() )
+		return;
+
 	beforeRun();
 	sort();
 	merge();
@@ -144,7 +147,7 @@ void SortingManager::sort()
 
 		if ( threadPool.IsAnyThreadIdle() )
 		{
-			std::vector<std::byte>* chunk = new std::vector<std::byte>();
+			std::vector<int>* chunk = new std::vector<int>();
 						
 			if ( chunk != nullptr )
 			{
@@ -152,6 +155,10 @@ void SortingManager::sort()
 				{
 					(void)threadPool.AddTask(&SortAlgorithmBase::Sort, m_sortAlgorithm, chunk, sortedChunkCounter);
 					++sortedChunkCounter;
+				}
+				else
+				{
+					delete chunk;
 				}
 			}
 		}
@@ -178,32 +185,33 @@ void SortingManager::merge()
 
 	for ( unsigned int i = 0; i < m_chunkCount; i++ )
 	{
-		std::string sortedInputFileName = "tmp//" + std::to_string(i) + ".txt";
-		handles[i].open(sortedInputFileName.c_str());
+		std::string sortedInputFileName = "tmp//" + std::to_string(i) + ".bin";
+		handles[i].open(sortedInputFileName.c_str(), std::ios::binary);
 		if ( handles[i].is_open() )
 		{
 			int firstValue;
-			handles[i] >> firstValue;
-			minHeap.push(std::pair<int, int>(firstValue, i));
+			handles[i].read((char*) &firstValue, sizeof(firstValue));
+			if ( handles[i] )
+				minHeap.push(std::pair<int, int>(firstValue, i));
 		}
 		else
 			LOG_ERROR("Could not open {0} file", sortedInputFileName);
 	}
 
-	std::ofstream outputFile("output.txt");
+	std::ofstream outputFile("output.bin", std::ios::binary);
 	if ( outputFile.is_open() )
 	{
 		while ( minHeap.size() > 0 )
 		{
 			auto minPair = minHeap.top();
 			minHeap.pop();
-			outputFile << minPair.first << '\n';
+			outputFile.write((char*) &minPair.first, sizeof(minPair.first));
 			int nextValue;
 			flush(outputFile);
-			if ( handles[minPair.second] >> nextValue )
-			{
+			handles[minPair.second].read((char*) &nextValue, sizeof(nextValue));
+
+			if ( handles[minPair.second] )
 				minHeap.push(std::pair <int, int>(nextValue, minPair.second));
-			}
 		}
 		outputFile.close();
 	}

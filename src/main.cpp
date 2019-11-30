@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
 	// Init logger
 	Logger::Init();
 	// Create sorting manager
-	SortingManager sortingManager(std::make_shared<QuickSortAlgorithm>(), "in.txt", 4u);
+	SortingManager sortingManager(std::make_shared<QuickSortAlgorithm>(), "in.bin", 4u);
 	// Run sorting manager
 	sortingManager.Run();
 
