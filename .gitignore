@@ -6,6 +6,8 @@
 # Test files
 in.txt
 output.txt
+in.bin
+output.bin
 tmp/
 
 # User-specific files
