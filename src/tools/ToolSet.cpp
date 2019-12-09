@@ -197,9 +197,66 @@ void ToolSet::CreateTmpDirectory()
 	fs::create_directories("tmp");
 }
 
+/*****************************************************************************
+ *	@brief Check if given number is power of two
+ *
+ *	@param number - number to check
+ *
+ *	@return true  - when is power of two
+ *	        false - otherwise
+ ****************************************************************************/
 bool ToolSet::CheckIfIsPowerOfTwo(std::uintmax_t number)
 {
 	return ( number != 0 ) && ( (number & ( number - 1 ) ) == 0 );
+}
+
+/*****************************************************************************
+ *	@brief Check if given file is sorted properly
+ *
+ *	@param fileName - input file name
+ *  @param asc - true when ascending / false if descending
+ *
+ *	@return true  - when is sorted properly
+ *	        false - otherwise
+ ****************************************************************************/
+bool ToolSet::CheckIfIsSortedProperly(std::string fileName, bool asc)
+{
+	bool result = true;
+	if ( fileName.empty() )
+		result = false;
+
+	if ( result )
+	{
+		std::ifstream file(fileName, std::ios::binary);
+		if ( file.is_open() )
+		{
+			int previous;
+			file.read((char*)&previous, (std::streamsize) sizeof(previous));
+
+			while ( file )
+			{
+				int temp;
+				file.read((char*)&temp, (std::streamsize) sizeof(temp));
+				if ( file )
+				{
+					if ( ( asc && temp < previous ) || 
+						   ( !asc && temp > previous ) )
+					{
+						result = false;
+						break;
+					}
+					else
+					{
+						previous = temp;
+					}
+				}
+			}
+
+			file.close();
+		}
+	}
+
+	return result;
 }
 
 //----------------------------------------------------------------------------

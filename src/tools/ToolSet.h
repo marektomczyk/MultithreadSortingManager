@@ -33,6 +33,8 @@ public:
 	static void CreateTmpDirectory();
 	/// @brief Check if number is power of two
 	static bool CheckIfIsPowerOfTwo(std::uintmax_t number);
+	/// @brief Check if file is properly sorted
+	static bool CheckIfIsSortedProperly(std::string fileName, bool asc = true);
 };
 
 #endif /* TOOLS_TOOLSET_H_ */
