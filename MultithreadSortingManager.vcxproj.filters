@@ -29,6 +29,9 @@
     <Filter Include="src\algorithm\BitonicSort">
       <UniqueIdentifier>{df3264a3-dca5-4ecd-bf14-06a810b5fbf8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\algorithm\MergeSort">
+      <UniqueIdentifier>{d5a3db67-7234-4039-8c3a-67c1bcf2746f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -51,6 +54,9 @@
     </ClCompile>
     <ClCompile Include="src\algorithm\BitonicSort\BitonicSortAlgorithm.cpp">
       <Filter>src\algorithm\BitonicSort</Filter>
+    </ClCompile>
+    <ClCompile Include="src\algorithm\MergeSort\MergeSortAlgorithm.cpp">
+      <Filter>src\algorithm\MergeSort</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -77,6 +83,9 @@
     </ClInclude>
     <ClInclude Include="src\algorithm\BitonicSort\BitonicSortAlgorithm.h">
       <Filter>src\algorithm\BitonicSort</Filter>
+    </ClInclude>
+    <ClInclude Include="src\algorithm\MergeSort\MergeSortAlgorithm.h">
+      <Filter>src\algorithm\MergeSort</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
