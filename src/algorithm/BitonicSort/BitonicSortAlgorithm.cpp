@@ -24,15 +24,15 @@ void BitonicSortAlgorithm::Sort(
 {
 	if ( ( chunk != nullptr ) && ( !chunk->empty() ) )
 	{
-		//LOG_TRACE("Sorting stared");
+		LOG_TRACE("Sorting stared");
 
-		//Timer::TimeRecord record;
+		Timer::TimeRecord record;
 		bSort(*chunk, 0, chunk->size(), true);
-		//record.Stop();
-		//Timer::AddRecord(record);
+		record.Stop();
+		Timer::AddRecord(record);
 
-		//LOG_TRACE("Finished sorting");
-		//ToolSet::WriteChunkIntoFile(dataToSort, chunkCount);
+		LOG_TRACE("Finished sorting");
+		ToolSet::WriteChunkIntoFile(*chunk, chunkCount);
 	}
 
 	delete chunk;
