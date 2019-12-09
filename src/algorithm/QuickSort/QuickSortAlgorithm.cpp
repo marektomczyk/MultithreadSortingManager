@@ -42,8 +42,8 @@ void QuickSortAlgorithm::Sort(
  *	@brief Quicksort algorithm implementation
  *
  *	@param dataToSort - vector of data to sort
- *	@param low -
- *	@param high -
+ *	@param left - left index of the sub-vector of vector to be sorted
+ *	@param right - right index of the sub-vector of vector to be sorted
  *
  *	@return None
  ****************************************************************************/
