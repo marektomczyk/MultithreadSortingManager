@@ -24,7 +24,7 @@ public:
 		std::size_t chunkSize, std::byte delim = std::byte{ 0x20 });
 	/// @brief Read chunk from given file
 	static bool ReadChunkFromFile(
-		std::ifstream& file, std::vector<int>& chunk, std::size_t chunkSize);
+		std::ifstream& file, std::vector<int>& chunk, std::uintmax_t chunkSize);
 	/// @brief Convert from bytes to integers
 	static void SplitAndConvert(
 		std::vector<std::byte>& bytes, std::vector<int>& numbers,

@@ -105,7 +105,7 @@ bool ToolSet::ReadChunkFromFile(
  *	        false - otherwise
  ****************************************************************************/
 bool ToolSet::ReadChunkFromFile(
-	std::ifstream& file, std::vector<int>& chunk, std::size_t chunkSize)
+	std::ifstream& file, std::vector<int>& chunk, std::uintmax_t chunkSize)
 {
 	bool result = true;
 	if ( !file.is_open() )
