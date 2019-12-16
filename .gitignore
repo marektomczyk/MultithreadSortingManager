@@ -4,10 +4,10 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 # Test files
-in.txt
-output.txt
-in.bin
-output.bin
+in*.txt
+output*.txt
+in*.bin
+output*.bin
 tmp/
 
 # User-specific files
