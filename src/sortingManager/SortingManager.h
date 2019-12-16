@@ -21,8 +21,7 @@
 #include "../algorithm/SortAlgorithmBase.h"
 #include "../threadPool/ThreadPool.hpp"
 
-// 2^30 * 2 = 2048 MB
-#define MAX_RAM_USAGE 1073741824 * sizeof(int)
+#define MAX_RAM_USAGE		268435456U	// 256 MB
 
 class SortingManager
 {
@@ -44,9 +43,9 @@ private:
 	/// @brief Input file stream
 	std::ifstream 								     		 m_file;
 	/// @brief Count of chunk to sort
-	unsigned int 						           		 m_chunkCount;
+	std::uintmax_t 						           	 m_chunkCount;
 	/// @brief Chunk size
-	unsigned int    									     m_chunkSize;
+	std::uintmax_t   									     m_chunkSize;
 	/// @brief Access control mutex
 	std::mutex							           		 m_mutex;
 

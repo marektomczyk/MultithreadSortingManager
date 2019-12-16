@@ -45,13 +45,13 @@ SortingManager::SortingManager(const std::shared_ptr<SortAlgorithmBase>& pSortAl
 			}
 			else
 			{
-				m_chunkSize = (unsigned int) (MAX_RAM_USAGE / m_threadCount) / sizeof(int);
-				m_chunkCount = (unsigned int) (fileSize / (m_chunkSize * (std::uintmax_t) sizeof(int)));
+				m_chunkSize = (MAX_RAM_USAGE / m_threadCount) / sizeof(int);
+				m_chunkCount = (fileSize / (m_chunkSize * (std::uintmax_t) sizeof(int)));
 
 				if ( m_chunkCount > _getmaxstdio() )
 				{
 					auto maxstdio = _getmaxstdio();
-					_setmaxstdio(m_chunkCount + maxstdio);
+					_setmaxstdio((int) m_chunkCount + maxstdio);
 				}
 			}
 
