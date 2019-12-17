@@ -26,7 +26,7 @@ void BitonicSortAlgorithm::Sort(
 	{
 		LOG_TRACE("Sorting stared");
 
-		Timer::TimeRecord record;
+		Timer::TimeRecord record(Timer::TimeRecord::eRecordType::RT_Sorting);
 		bSort(*chunk, 0, chunk->size(), true);
 		record.Stop();
 		Timer::AddRecord(record);

@@ -26,7 +26,7 @@ void QuickSortAlgorithm::Sort(
 	{
 		LOG_TRACE("Sorting stared");
 
-		Timer::TimeRecord record;
+		Timer::TimeRecord record(Timer::TimeRecord::eRecordType::RT_Sorting);
 		qSort(*chunk, 0, chunk->size() - 1);
 		record.Stop();
 		Timer::AddRecord(record);

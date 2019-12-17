@@ -108,7 +108,6 @@ void SortingManager::Run()
  ****************************************************************************/
 void SortingManager::beforeRun()
 {
-	Timer::StartTimer();
 	LOG_INFO("Sorting manager start working...");
 }
 
@@ -121,9 +120,14 @@ void SortingManager::beforeRun()
  ****************************************************************************/
 void SortingManager::afterRun()
 {
-	LOG_INFO("Sorting manager finished");
-	Timer::StopTimer();
-	Timer::ShowRecords();
+	LOG_INFO("Sorting manager finished\n");
+	LOG_INFO("======== Timer record =========");
+	LOG_INFO("Sorting time:      {:03.3f} ms", Timer::GetTime(Timer::TimeRecord::eRecordType::RT_Sorting));
+	LOG_INFO("Merging time:      {:03.3f} ms", Timer::GetTime(Timer::TimeRecord::eRecordType::RT_Merging));
+	LOG_INFO("Reading data time: {:03.3f} ms", Timer::GetTime(Timer::TimeRecord::eRecordType::RT_ReadData));
+	LOG_INFO("Writing data time: {:03.3f} ms", Timer::GetTime(Timer::TimeRecord::eRecordType::RT_WriteData));
+	LOG_INFO("Summary time:      {:03.3f} ms", Timer::GetTime(Timer::TimeRecord::eRecordType::RT_All));
+	LOG_INFO("==============================");
 }
 
 /*****************************************************************************
@@ -175,7 +179,7 @@ void SortingManager::sort()
 void SortingManager::merge()
 {
 	LOG_INFO("Merge temporary files started");
-
+	Timer::TimeRecord record(Timer::TimeRecord::eRecordType::RT_Merging);
 	auto comparator = [](const std::pair<int, int>& p1, const std::pair<int, int>& p2) { return p1.first > p2.first; };
 	std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int> >, decltype(comparator)> minHeap(comparator);
 
@@ -220,7 +224,8 @@ void SortingManager::merge()
 
 	for (unsigned int i = 0; i < m_chunkCount; ++i)
 		handles[i].close();
-
+	record.Stop();
+	Timer::AddRecord(record);
 	LOG_INFO("Merge temporary files finished");
 }
 

@@ -27,7 +27,7 @@ void MergeSortAlgorithm::Sort(
 	{
 		LOG_TRACE("Sorting stared");
 
-		Timer::TimeRecord record;
+		Timer::TimeRecord record(Timer::TimeRecord::eRecordType::RT_Sorting);
 		mSort(chunk->begin(), chunk->end());
 		record.Stop();
 		Timer::AddRecord(record);

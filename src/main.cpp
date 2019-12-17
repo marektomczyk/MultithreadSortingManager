@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 	// Init logger
 	Logger::Init();
 	// Create sorting manager
-	SortingManager sortingManager(std::make_shared<MergeSortAlgorithm>(), "in.bin", 4u);
+	SortingManager sortingManager(std::make_shared<MergeSortAlgorithm>(), "in-512mb.bin", 4u);
 	// Run sorting manager
 	sortingManager.Run();
 
