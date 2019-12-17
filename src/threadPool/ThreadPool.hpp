@@ -25,7 +25,7 @@ public:
 
 	/// @brief Class constructor
 	ThreadPool(const unsigned int threadCount = std::thread::hardware_concurrency())
-		: m_stopProcessing(false), m_isEmergencyStop(false), m_isPaused(false)
+		: m_stopProcessing(false), m_isEmergencyStop(false), m_isPaused(false), m_workingThreads(0u)
 	{
 		if (threadCount == 0)
 			assert(false);
@@ -73,6 +73,12 @@ public:
 		}
 
 		return result;
+	}
+
+	void WaitForIdleThread()
+	{
+		std::unique_lock< std::mutex > lock{ m_callbackMutex };
+		m_finishedWorking.wait(lock, [&] { return m_workingThreads < m_workers.size(); });
 	}
 
 	/// @brief Emergency stop thread pool
@@ -137,11 +143,14 @@ public:
 private:
 	std::vector < std::thread >		  m_workers;
 	std::recursive_mutex		  	    m_mutex;
+	std::mutex											m_callbackMutex;
 	std::condition_variable_any     m_notifier;
+	std::condition_variable				  m_finishedWorking;
 	std::unique_ptr< Task >			    m_pendingTask;
 	std::atomic < bool >						m_stopProcessing;
 	std::atomic < bool >						m_isEmergencyStop;
 	std::atomic < bool >            m_isPaused;
+	std::atomic < unsigned int >    m_workingThreads;
 
 	/// @brief Worker thread method
 	void run()
@@ -169,7 +178,18 @@ private:
 				task = std::move(m_pendingTask);
 			}
 
+			{
+				std::lock_guard< std::mutex > lock{ m_callbackMutex };
+				++m_workingThreads;
+			}
+
 			(*task)();
+
+			{
+				std::lock_guard< std::mutex > lock{ m_callbackMutex };
+				--m_workingThreads;
+				m_finishedWorking.notify_one();
+			}
 		}
 	}
 

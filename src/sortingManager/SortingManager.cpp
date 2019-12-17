@@ -144,9 +144,9 @@ void SortingManager::sort()
 
 	while ( sortedChunkCounter < m_chunkCount )
 	{
-		while ( !threadPool.IsAnyThreadIdle() )
+		if ( !threadPool.IsAnyThreadIdle() )
 		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(10));
+			threadPool.WaitForIdleThread();
 		}
 
 		if ( threadPool.IsAnyThreadIdle() )
