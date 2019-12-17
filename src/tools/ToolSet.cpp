@@ -13,6 +13,7 @@
 #include <fstream>
 #include <filesystem>
 #include "../log/Logger.h"
+#include "../timer/Timer.h"
 
 /*****************************************************************************
  *	@brief Write chunk into file
@@ -36,7 +37,10 @@ bool ToolSet::WriteChunkIntoFile(
 
 	if ( outFile.is_open() )
 	{
+		Timer::TimeRecord record(Timer::TimeRecord::eRecordType::RT_WriteData);
 		outFile.write((char*) sortedChunk.data(), (std::streamsize) sortedChunk.size() * sizeof(sortedChunk[0]));
+		record.Stop();
+		Timer::AddRecord(record);
 		if ( outFile )
 		{
 			result = true;
@@ -45,52 +49,6 @@ bool ToolSet::WriteChunkIntoFile(
 		outFile.close();
 	}
 
-	return result;
-}
-
-/*****************************************************************************
- *	@brief  Reads data chunk from file
- * 
- *	@note   Reads more data if the position is in the middle of a number
- *
- *	@param  file  - file with data
- *  @param  chunk - vector into which the data will be loaded
- *  @param  chunkSize - chunk size
- *  @param  delim - delimeter (by default 0x32 - space)
- *
- *	@return true  - when successfully created
- *	        false - otherwise
- ****************************************************************************/
-bool ToolSet::ReadChunkFromFile(
-	std::ifstream& file, std::vector<std::byte>& chunk, 
-	std::size_t chunkSize, std::byte delim)
-{
-	bool result = true;
-	if ( !file.is_open() )
-		result = false;
-
-	if ( chunk.capacity() != chunkSize )
-		chunk.resize(chunkSize);
-
-	if ( result )
-		file.read((char*) chunk.data(), chunkSize);
-
-	if ( chunk.empty() )
-		result = false;
-	
-	if ( result )
-	{
-		if ( ( chunk.back() != delim ) && ( !file.eof() ) )
-		{
-			std::byte byte;
-			do
-			{
-				file.read((char*) &byte, sizeof(std::byte));
-				if ( file )
-					chunk.push_back(byte);
-			} while ( ( byte != delim ) && ( file ) );
-		}
-	}
 	return result;
 }
 
@@ -115,62 +73,17 @@ bool ToolSet::ReadChunkFromFile(
 		chunk.resize(chunkSize);
 
 	if ( result )
-		file.read((char*) chunk.data(), (std::streamsize) chunkSize * sizeof(chunk[0]));
+	{
+		Timer::TimeRecord record(Timer::TimeRecord::eRecordType::RT_ReadData);
+		file.read((char*)chunk.data(), (std::streamsize) chunkSize * sizeof(chunk[0]));
+		record.Stop();
+		Timer::AddRecord(record);
+	}
 
 	if ( chunk.empty() )
 		result = false;
 	
 	return result;
-}
-
-/*****************************************************************************
- *	@brief Split data by given delim and convetrs from bytes to integers
- *
- *	@param  bytes - vector from data will be converted
- *  @param  numbers - vector into which the data will be loaded
- *  @param  delim - delimeter (by default 0x32 - space)
- *
- *	@return true  - when successfully created
- *	        false - otherwise
- ****************************************************************************/
-void ToolSet::SplitAndConvert(
-	std::vector<std::byte>& bytes, std::vector<int>& numbers,
-	const std::byte delim)
-{
-	if ( !bytes.empty() )
-	{
-		std::stringstream stream;
-		do
-		{
-			auto iterator = bytes.begin();
-			if ( ( *iterator != delim ) && 
-				    std::isdigit(static_cast<unsigned char>(*iterator)) )
-			{
-				stream << (int)((char) *iterator - '0');
-			}
-			else
-			{
-				if ( stream.tellp() != 0 )
-				{
-					int tmp;
-					stream >> tmp;
-					numbers.push_back(tmp);
-					stream.str("");
-					stream.clear();
-				}
-			}
-			bytes.erase(iterator);
-		} while ( !bytes.empty() );
-
-		if ( stream.tellp() != 0 )
-		{
-			int tmp;
-			stream >> tmp;
-			numbers.push_back(tmp);
-			stream.str("");
-			stream.clear();
-		}
-	}
 }
 
 /*****************************************************************************
