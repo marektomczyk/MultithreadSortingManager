@@ -15,6 +15,11 @@
 #include "../log/Logger.h"
 #include "../timer/Timer.h"
 
+// Algorithm's
+#include "../algorithm/QuickSort/QuickSortAlgorithm.h"
+#include "../algorithm/BitonicSort/BitonicSortAlgorithm.h"
+#include "../algorithm/MergeSort/MergeSortAlgorithm.h"
+
 /*****************************************************************************
  *	@brief Write chunk into file
  *
@@ -170,6 +175,38 @@ bool ToolSet::CheckIfIsSortedProperly(std::string fileName, bool asc)
 	}
 
 	return result;
+}
+
+/*****************************************************************************
+ *	@brief Get sort algorithm by name
+ *
+ *	@param algorithmName - algorithm name
+ *
+ *	@return Sort algorithm object  - when sucessfull
+ *	        nullptr - otherwise
+ ****************************************************************************/
+std::shared_ptr<SortAlgorithmBase> ToolSet::GetSortAlgorithmByName(
+	const std::string& algorithmName)
+{
+	std::shared_ptr<SortAlgorithmBase> sortAlgorithm = nullptr;
+
+	if ( !algorithmName.empty() )
+	{
+		if ( algorithmName == "QuickSort" )
+		{
+			sortAlgorithm = std::make_shared<QuickSortAlgorithm>();
+		}
+		else if ( algorithmName == "MergeSort" )
+		{
+			sortAlgorithm = std::make_shared<MergeSortAlgorithm>();
+		}
+		else if ( algorithmName == "BitonicSort" )
+		{
+			sortAlgorithm = std::make_shared<BitonicSortAlgorithm>();
+		}
+	}
+
+	return sortAlgorithm;
 }
 
 //----------------------------------------------------------------------------

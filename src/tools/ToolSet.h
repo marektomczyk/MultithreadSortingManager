@@ -11,6 +11,7 @@
 
 #include <vector>
 #include <fstream>
+#include "../algorithm/SortAlgorithmBase.h"
 
 class ToolSet
 {
@@ -24,9 +25,14 @@ public:
 	/// @brief Create tmp directory
 	static void CreateTmpDirectory();
 	/// @brief Check if number is power of two
-	static bool CheckIfIsPowerOfTwo(std::uintmax_t number);
+	static bool CheckIfIsPowerOfTwo(
+		std::uintmax_t number);
 	/// @brief Check if file is properly sorted
-	static bool CheckIfIsSortedProperly(std::string fileName, bool asc = true);
+	static bool CheckIfIsSortedProperly(
+		std::string fileName, bool asc = true);
+	/// @brief Get sort algorithm by name
+	static std::shared_ptr< SortAlgorithmBase> GetSortAlgorithmByName(
+		const std::string& algorithmName);
 };
 
 #endif /* TOOLS_TOOLSET_H_ */
