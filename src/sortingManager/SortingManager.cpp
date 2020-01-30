@@ -18,19 +18,21 @@
  *
  ****************************************************************************/
 SortingManager::SortingManager(const std::shared_ptr<SortAlgorithmBase>& pSortAlgorithm,
-															 std::string const& fileName, 
+															 std::string const& inFileName, 
+															 std::string const& outFileName,
 															 const unsigned int threadCount)
 	: m_sortAlgorithm(pSortAlgorithm),
 		m_threadCount(threadCount),
 		m_chunkCount(0),
 		m_chunkSize(0)
 {
-	if ( !fileName.empty() )
+	if ( !inFileName.empty() && !outFileName.empty() )
 	{
-		m_file.open(fileName, std::ios::binary);
+		m_outFileName = outFileName;
+		m_file.open(inFileName, std::ios::binary);
 		if ( m_file.is_open() )
 		{
-			auto fileSize = std::filesystem::file_size(fileName);
+			auto fileSize = std::filesystem::file_size(inFileName);
 			if ( !ToolSet::CheckIfIsPowerOfTwo(fileSize) )
 			{
 				LOG_ERROR("Filesize is not power of two! Could not sort this file.");
@@ -59,7 +61,7 @@ SortingManager::SortingManager(const std::shared_ptr<SortAlgorithmBase>& pSortAl
 		}
 		else
 		{
-			LOG_ERROR("Could not open file {0}", fileName);
+			LOG_ERROR("Could not open file {0}", inFileName);
 		}
 	}
 }
@@ -146,7 +148,7 @@ void SortingManager::sort()
 	{
 		while ( !threadPool.IsAnyThreadIdle() )
 		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(10));
+			std::this_thread::sleep_for(std::chrono::milliseconds(3));
 		}
 
 		if ( threadPool.IsAnyThreadIdle() )
@@ -202,7 +204,7 @@ void SortingManager::merge()
 			LOG_ERROR("Could not open {0} file", sortedInputFileName);
 	}
 
-	std::ofstream outputFile("output.bin", std::ios::binary);
+	std::ofstream outputFile(m_outFileName, std::ios::binary);
 	if ( outputFile.is_open() )
 	{
 		while ( minHeap.size() > 0 )

@@ -28,8 +28,9 @@ class SortingManager
 public:
 	/// @brief Class constructor
 	SortingManager(const std::shared_ptr<SortAlgorithmBase>& pSortAlgorithm,
-		std::string const& fileName,
-		unsigned int threadCount = std::thread::hardware_concurrency());
+		std::string const& inFileName,
+		std::string const& outFileName,
+		unsigned int threadCount);
 	/// @brief Class destructor
 	virtual ~SortingManager();
 	/// @brief 
@@ -42,6 +43,8 @@ private:
 	unsigned int                 		       m_threadCount;
 	/// @brief Input file stream
 	std::ifstream 								     		 m_file;
+	/// @brief Output file name
+	std::string                            m_outFileName;
 	/// @brief Count of chunk to sort
 	std::uintmax_t 						           	 m_chunkCount;
 	/// @brief Chunk size
