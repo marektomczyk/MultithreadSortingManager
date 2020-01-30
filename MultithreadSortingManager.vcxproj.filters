@@ -32,6 +32,9 @@
     <Filter Include="src\algorithm\MergeSort">
       <UniqueIdentifier>{d5a3db67-7234-4039-8c3a-67c1bcf2746f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\argParser">
+      <UniqueIdentifier>{8c46b04e-353d-480c-9a76-42b0c27b2dab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -86,6 +89,12 @@
     </ClInclude>
     <ClInclude Include="src\algorithm\MergeSort\MergeSortAlgorithm.h">
       <Filter>src\algorithm\MergeSort</Filter>
+    </ClInclude>
+    <ClInclude Include="src\argParser\cxxopts.hpp">
+      <Filter>src\argParser</Filter>
+    </ClInclude>
+    <ClInclude Include="src\argParser\ArgParser.hpp">
+      <Filter>src\argParser</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

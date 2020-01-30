@@ -143,6 +143,8 @@
     <ClInclude Include="src\algorithm\MergeSort\MergeSortAlgorithm.h" />
     <ClInclude Include="src\algorithm\QuickSort\QuickSortAlgorithm.h" />
     <ClInclude Include="src\algorithm\SortAlgorithmBase.h" />
+    <ClInclude Include="src\argParser\ArgParser.hpp" />
+    <ClInclude Include="src\argParser\cxxopts.hpp" />
     <ClInclude Include="src\log\Logger.h" />
     <ClInclude Include="src\sortingManager\SortingManager.h" />
     <ClInclude Include="src\threadPool\ThreadPool.hpp" />
